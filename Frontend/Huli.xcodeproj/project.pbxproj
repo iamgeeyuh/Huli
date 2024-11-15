@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B96C807B2CE41D920023F301 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = B96C807A2CE41D920023F301 /* GoogleSignIn */; };
+		B96C807D2CE41D920023F301 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B96C807C2CE41D920023F301 /* GoogleSignInSwift */; };
+		B96C80822CE537930023F301 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = B96C80812CE537930023F301 /* GoogleSignIn */; };
+		B96C80842CE537930023F301 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B96C80832CE537930023F301 /* GoogleSignInSwift */; };
+		B96C80862CE53C340023F301 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = B96C80852CE53C340023F301 /* GoogleSignIn */; };
+		B96C80882CE53C340023F301 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B96C80872CE53C340023F301 /* GoogleSignInSwift */; };
 		B9AC3EC22CDA88FC00FCC16B /* HuliApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AC3EC12CDA88FC00FCC16B /* HuliApp.swift */; };
 		B9AC3EC42CDA88FC00FCC16B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AC3EC32CDA88FC00FCC16B /* ContentView.swift */; };
 		B9AC3EC62CDA88FE00FCC16B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9AC3EC52CDA88FE00FCC16B /* Assets.xcassets */; };
@@ -17,6 +23,9 @@
 		B9AC3F0B2CDB2A1000FCC16B /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AC3F0A2CDB2A1000FCC16B /* Message.swift */; };
 		B9AC3F0D2CDB2A3400FCC16B /* ChatBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AC3F0C2CDB2A3400FCC16B /* ChatBubble.swift */; };
 		B9AC3F0F2CDB2A4F00FCC16B /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AC3F0E2CDB2A4F00FCC16B /* Color+Hex.swift */; };
+		B9F586572CE7C1CD00CD1785 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = B9F586562CE7C1CD00CD1785 /* GoogleSignIn */; };
+		B9F586592CE7C1CD00CD1785 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B9F586582CE7C1CD00CD1785 /* GoogleSignInSwift */; };
+		B9F5865B2CE7E00B00CD1785 /* ChatBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F5865A2CE7E00600CD1785 /* ChatBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +60,8 @@
 		B9AC3F0A2CDB2A1000FCC16B /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		B9AC3F0C2CDB2A3400FCC16B /* ChatBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBubble.swift; sourceTree = "<group>"; };
 		B9AC3F0E2CDB2A4F00FCC16B /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
+		B9F586542CE7BA0800CD1785 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B9F5865A2CE7E00600CD1785 /* ChatBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +69,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B96C80862CE53C340023F301 /* GoogleSignIn in Frameworks */,
+				B96C807B2CE41D920023F301 /* GoogleSignIn in Frameworks */,
+				B96C807D2CE41D920023F301 /* GoogleSignInSwift in Frameworks */,
+				B9F586592CE7C1CD00CD1785 /* GoogleSignInSwift in Frameworks */,
+				B96C80882CE53C340023F301 /* GoogleSignInSwift in Frameworks */,
+				B96C80822CE537930023F301 /* GoogleSignIn in Frameworks */,
+				B96C80842CE537930023F301 /* GoogleSignInSwift in Frameworks */,
+				B9F586572CE7C1CD00CD1785 /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,8 +122,10 @@
 			children = (
 				B9AC3EC12CDA88FC00FCC16B /* HuliApp.swift */,
 				B9AC3EC32CDA88FC00FCC16B /* ContentView.swift */,
+				B9F5865A2CE7E00600CD1785 /* ChatBar.swift */,
 				B9AC3F0A2CDB2A1000FCC16B /* Message.swift */,
 				B9AC3F0C2CDB2A3400FCC16B /* ChatBubble.swift */,
+				B9F586542CE7BA0800CD1785 /* Info.plist */,
 				B9AC3F0E2CDB2A4F00FCC16B /* Color+Hex.swift */,
 				B9AC3EC52CDA88FE00FCC16B /* Assets.xcassets */,
 				B9AC3ECA2CDA88FE00FCC16B /* Huli.entitlements */,
@@ -202,7 +223,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1540;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 1610;
 				TargetAttributes = {
 					B9AC3EBD2CDA88FC00FCC16B = {
 						CreatedOnToolsVersion = 15.4;
@@ -226,6 +247,9 @@
 				Base,
 			);
 			mainGroup = B9AC3EB52CDA88FC00FCC16B;
+			packageReferences = (
+				B96C80792CE41D920023F301 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+			);
 			productRefGroup = B9AC3EBF2CDA88FC00FCC16B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -269,6 +293,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9AC3F0F2CDB2A4F00FCC16B /* Color+Hex.swift in Sources */,
+				B9F5865B2CE7E00B00CD1785 /* ChatBar.swift in Sources */,
 				B9AC3F0B2CDB2A1000FCC16B /* Message.swift in Sources */,
 				B9AC3EC42CDA88FC00FCC16B /* ContentView.swift in Sources */,
 				B9AC3EC22CDA88FC00FCC16B /* HuliApp.swift in Sources */,
@@ -366,7 +391,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -440,8 +465,10 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Huli/Preview Content\"";
+				DEVELOPMENT_TEAM = 6V664NC989;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Huli/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -468,8 +495,10 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Huli/Preview Content\"";
+				DEVELOPMENT_TEAM = 6V664NC989;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Huli/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -489,7 +518,6 @@
 		B9AC3EE72CDA88FE00FCC16B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -507,7 +535,6 @@
 		B9AC3EE82CDA88FE00FCC16B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -525,7 +552,6 @@
 		B9AC3EEA2CDA88FE00FCC16B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -541,7 +567,6 @@
 		B9AC3EEB2CDA88FE00FCC16B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -594,6 +619,60 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B96C80792CE41D920023F301 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B96C807A2CE41D920023F301 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B96C80792CE41D920023F301 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		B96C807C2CE41D920023F301 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B96C80792CE41D920023F301 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+		B96C80812CE537930023F301 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B96C80792CE41D920023F301 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		B96C80832CE537930023F301 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B96C80792CE41D920023F301 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+		B96C80852CE53C340023F301 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B96C80792CE41D920023F301 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		B96C80872CE53C340023F301 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B96C80792CE41D920023F301 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+		B9F586562CE7C1CD00CD1785 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B96C80792CE41D920023F301 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		B9F586582CE7C1CD00CD1785 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B96C80792CE41D920023F301 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B9AC3EB62CDA88FC00FCC16B /* Project object */;
 }

@@ -6,12 +6,28 @@
 //
 
 import SwiftUI
+import GoogleSignIn
 
 @main
 struct HuliApp: App {
+    @State var user: User?
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(user: self.$user)
+                .onOpenURL { url in
+                    GIDSignIn.sharedInstance.handle(url)
+                }
+                .onAppear {
+                    GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
+                        if let user {
+                            self.user = .init(name: user.profile?.name ?? "")
+                        }
+                    }
+                }
         }
     }
+}
+
+struct User {
+    var name: String
 }

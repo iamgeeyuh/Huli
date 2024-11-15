@@ -1,6 +1,10 @@
 import SwiftUI
+import GoogleSignInSwift
+import GoogleSignIn
 
 struct ContentView: View {
+    @Binding var user: User?
+    
     @State private var messages: [Message] = [
         Message(text: "Hi there! I’m Huli, your friendly AI pet assistant. I’m here to make life a bit easier and more enjoyable for you.", isUserMessage: false)
     ]
@@ -14,6 +18,22 @@ struct ContentView: View {
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 250, height: 250)
             }
+            if let user {
+                Text("Hello \(user.name)")
+                Button {
+                    GIDSignIn.sharedInstance.signOut()
+                    GIDSignIn.sharedInstance.disconnect()
+                    self.user = nil
+                } label: {
+                    Text("Log out")
+                }
+            } else {
+                Button {
+                    handleSignIn()
+                } label: {
+                    Text("Log in with Google")
+                }
+            }
             ScrollView {
                 VStack(spacing: 8) {
                     ForEach(messages) { message in
@@ -22,31 +42,7 @@ struct ContentView: View {
                 }
                 .padding()
             }
-
-            HStack {
-                ZStack {
-                    TextField("Chat with Huli", text: $currentMessage)
-                        .padding(7)
-                        .padding(.leading, 15)
-                        .padding(.trailing, 40)
-                        .cornerRadius(25)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 25)
-                                .stroke(Color.black, lineWidth: 0.5)
-                        )
-                    
-                    HStack {
-                        Spacer()
-                        Button(action: sendMessage) {
-                            Image(systemName: "paperplane.fill") 
-                                .foregroundColor(Color(hex: "#F69B52"))
-                                .padding(.trailing, 15)
-                        }
-                    }
-                }
-                .padding(.horizontal) // Padding around the text field
-            }
-            .padding()
+            ChatBar(currentMessage: $currentMessage, sendMessage: sendMessage)
         }
         .navigationTitle("Chatbot")
     }
@@ -63,10 +59,38 @@ struct ContentView: View {
             messages.append(botResponse)
         }
     }
+    
+    func handleSignIn() {
+        print("signing in")
+        if let rootViewController = getRootViewController() {
+            GIDSignIn.sharedInstance.signIn(
+                withPresenting: rootViewController
+            ) { result, error in
+                guard let result else {
+                    // inspect error
+                    return
+                }
+                self.user = User.init(name: result.user.profile?.name ?? "")
+            }
+        }
+    }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+func getRootViewController() -> UIViewController? {
+    guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+          let rootViewController = scene.windows.first?.rootViewController else { return nil }
+    return getVisibleViewController(from: rootViewController)
+}
+
+func getVisibleViewController(from vc: UIViewController) -> UIViewController? {
+    if let nav = vc as? UINavigationController {
+        return getVisibleViewController(from: nav.visibleViewController!)
     }
+    if let tab = vc as? UITabBarController {
+        return getVisibleViewController(from: tab.selectedViewController!)
+    }
+    if let presented = vc.presentedViewController {
+        return getVisibleViewController(from: presented)
+    }
+    return vc
 }
