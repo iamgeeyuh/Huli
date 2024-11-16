@@ -7,7 +7,6 @@ const MessageSchema = new mongoose.Schema({
 });
 
 const UserChatSchema = new mongoose.Schema({
-    name: { type: String, required: true },
     email: { type: String, required: true, unique: true }, 
     chatHistory: [MessageSchema]
 });

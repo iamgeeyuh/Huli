@@ -20,7 +20,7 @@ struct HuliApp: App {
                 .onAppear {
                     GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
                         if let user {
-                            self.user = .init(name: user.profile?.name ?? "")
+                            self.user = .init(name: user.profile?.name ?? "", email: user.profile?.email ?? "")
                         }
                     }
                 }
@@ -30,4 +30,5 @@ struct HuliApp: App {
 
 struct User {
     var name: String
+    var email: String
 }

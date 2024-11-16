@@ -26,6 +26,7 @@
 		B9F586572CE7C1CD00CD1785 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = B9F586562CE7C1CD00CD1785 /* GoogleSignIn */; };
 		B9F586592CE7C1CD00CD1785 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B9F586582CE7C1CD00CD1785 /* GoogleSignInSwift */; };
 		B9F5865B2CE7E00B00CD1785 /* ChatBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F5865A2CE7E00600CD1785 /* ChatBar.swift */; };
+		B9F586602CE8078900CD1785 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F5865F2CE8078600CD1785 /* AppConfig.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,7 @@
 		B9AC3F0E2CDB2A4F00FCC16B /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
 		B9F586542CE7BA0800CD1785 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B9F5865A2CE7E00600CD1785 /* ChatBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBar.swift; sourceTree = "<group>"; };
+		B9F5865F2CE8078600CD1785 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +127,7 @@
 				B9F5865A2CE7E00600CD1785 /* ChatBar.swift */,
 				B9AC3F0A2CDB2A1000FCC16B /* Message.swift */,
 				B9AC3F0C2CDB2A3400FCC16B /* ChatBubble.swift */,
+				B9F5865F2CE8078600CD1785 /* AppConfig.swift */,
 				B9F586542CE7BA0800CD1785 /* Info.plist */,
 				B9AC3F0E2CDB2A4F00FCC16B /* Color+Hex.swift */,
 				B9AC3EC52CDA88FE00FCC16B /* Assets.xcassets */,
@@ -295,6 +298,7 @@
 				B9AC3F0F2CDB2A4F00FCC16B /* Color+Hex.swift in Sources */,
 				B9F5865B2CE7E00B00CD1785 /* ChatBar.swift in Sources */,
 				B9AC3F0B2CDB2A1000FCC16B /* Message.swift in Sources */,
+				B9F586602CE8078900CD1785 /* AppConfig.swift in Sources */,
 				B9AC3EC42CDA88FC00FCC16B /* ContentView.swift in Sources */,
 				B9AC3EC22CDA88FC00FCC16B /* HuliApp.swift in Sources */,
 				B9AC3F0D2CDB2A3400FCC16B /* ChatBubble.swift in Sources */,

@@ -20,7 +20,6 @@ async function verifyToken(req, res, next) {
 
         req.user = {
             email: payload.email, 
-            name: payload.name, 
         };
 
         next();

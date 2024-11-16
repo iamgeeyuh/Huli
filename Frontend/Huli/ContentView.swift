@@ -4,12 +4,10 @@ import GoogleSignIn
 
 struct ContentView: View {
     @Binding var user: User?
-    
-    @State private var messages: [Message] = [
-        Message(text: "Hi there! I’m Huli, your friendly AI pet assistant. I’m here to make life a bit easier and more enjoyable for you.", isUserMessage: false)
-    ]
+    @State private var messages: [Message] = []
     @State private var currentMessage = ""
-
+    @State private var isLoading = false
+    
     var body: some View {
         VStack {
             VStack {
@@ -24,6 +22,7 @@ struct ContentView: View {
                     GIDSignIn.sharedInstance.signOut()
                     GIDSignIn.sharedInstance.disconnect()
                     self.user = nil
+                    self.messages = []
                 } label: {
                     Text("Log out")
                 }
@@ -45,23 +44,82 @@ struct ContentView: View {
             ChatBar(currentMessage: $currentMessage, sendMessage: sendMessage)
         }
         .navigationTitle("Chatbot")
-    }
-
-    private func sendMessage() {
-        guard !currentMessage.isEmpty else { return }
-
-        let userMessage = Message(text: currentMessage, isUserMessage: true)
-        messages.append(userMessage)
-        currentMessage = ""
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            let botResponse = Message(text: "This is a bot response!", isUserMessage: false)
-            messages.append(botResponse)
+        .onAppear {
+            if let user = user {
+                fetchMessages()
+            }
         }
     }
     
+    private func fetchMessages() {
+        guard let url = URL(string: "\(AppConfig.backendURL)/chat") else { return }
+        
+        isLoading = true
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(getToken())", forHTTPHeaderField: "Authorization")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            DispatchQueue.main.async {
+                isLoading = false
+            }
+            if let error = error {
+                print("Error fetching messages: \(error)")
+                return
+            }
+            guard let data = data else { return }
+            do {
+                let fetchedMessages = try JSONDecoder().decode([Message].self, from: data)
+                DispatchQueue.main.async {
+                    self.messages = fetchedMessages
+                }
+            } catch {
+                print("Error decoding messages: \(error)")
+            }
+        }.resume()
+    }
+    
+    private func sendMessage() {
+        guard !currentMessage.isEmpty, let user = user else { return }
+        
+        let userMessage = Message(text: currentMessage, isUserMessage: true)
+        messages.append(userMessage)
+        currentMessage = ""
+        
+        let newMessage = ["message": ["text": userMessage.text, "isUserMessage": true]]
+        
+        guard let url = URL(string: "\(AppConfig.backendURL)/chat/test-chat") else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(getToken())", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: newMessage)
+        } catch {
+            print("Error serializing message: \(error)")
+            return
+        }
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error sending message: \(error)")
+                return
+            }
+            guard let data = data else { return }
+            do {
+                let botResponse = try JSONDecoder().decode(Message.self, from: data)
+                DispatchQueue.main.async {
+                    self.messages.append(botResponse)
+                }
+            } catch {
+                print("Error decoding bot response: \(error)")
+            }
+        }.resume()
+    }
+    
+    
     func handleSignIn() {
-        print("signing in")
         if let rootViewController = getRootViewController() {
             GIDSignIn.sharedInstance.signIn(
                 withPresenting: rootViewController
@@ -70,7 +128,8 @@ struct ContentView: View {
                     // inspect error
                     return
                 }
-                self.user = User.init(name: result.user.profile?.name ?? "")
+                self.user = User.init(name: result.user.profile?.name ?? "", email: result.user.profile?.email ?? "")
+                fetchMessages()
             }
         }
     }
@@ -93,4 +152,9 @@ func getVisibleViewController(from vc: UIViewController) -> UIViewController? {
         return getVisibleViewController(from: presented)
     }
     return vc
+}
+
+func getToken() -> String {
+    // Retrieve and return the ID token stored during Google Sign-In
+    return GIDSignIn.sharedInstance.currentUser?.idToken?.tokenString ?? ""
 }

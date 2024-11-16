@@ -4,6 +4,56 @@ const verifyToken = require("../middleware/verifyToken");
 
 const router = express.Router();
 
+// Testing Route: Chatbot Responds with a Predefined or Dynamic Message
+router.post("/test-chat", verifyToken, async (req, res) => {
+    const { message } = req.body;
+
+    if (!message || !message.text) {
+        return res.status(400).json({ message: "Message text is required" });
+    }
+
+    try {
+        const email = req.user.email; // Extract user email from token (handled in verifyToken middleware)
+
+        // Find or create a user chat document
+        let userChat = await UserChat.findOne({ email });
+
+        if (!userChat) {
+            userChat = new UserChat({
+                email,
+                chatHistory: []
+            });
+        }
+
+        // Add the user message to the chat history
+        userChat.chatHistory.push({
+            text: message.text,
+            isUserMessage: true
+        });
+
+        // Generate a bot response
+        const botResponse = "This is a bot response!";
+
+        // Add the bot response to the chat history
+        userChat.chatHistory.push({
+            text: botResponse,
+            isUserMessage: false
+        });
+
+        // Save the updated chat history to the database
+        await userChat.save();
+
+        // Return the bot response to the frontend
+        res.status(200).json({
+            text: botResponse,
+            isUserMessage: false
+        });
+    } catch (err) {
+        console.error("Error generating chatbot response:", err);
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
 // Create or Update User and Add a New Message
 router.post("/", verifyToken, async (req, res) => {
     const { message } = req.body;
@@ -14,14 +64,12 @@ router.post("/", verifyToken, async (req, res) => {
 
     try {
         const email = req.user.email; 
-        const name = req.user.name; 
 
         let userChat = await UserChat.findOne({ email });
 
         if (!userChat) {
             // If the user doesn't exist, create a new user
             userChat = new UserChat({
-                name,
                 email,
                 chatHistory: []
             });
@@ -44,6 +92,7 @@ router.post("/", verifyToken, async (req, res) => {
 
 // Get Chat History for a User
 router.get("/", verifyToken, async (req, res) => {
+    console.log("fetch")
     const email = req.user.email; 
     const { page = 1, limit = 10 } = req.query; // Default values: page 1, 10 messages per page
 
