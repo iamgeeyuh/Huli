@@ -44,7 +44,7 @@ struct LoginView: View {
             GIDSignIn.sharedInstance.signIn(
                 withPresenting: rootViewController,
                 hint: nil,
-                additionalScopes: ["https://www.googleapis.com/auth/calendar", "https://www.googleapis.com/auth/calendar.events"]
+                additionalScopes: ["https://www.googleapis.com/auth/calendar"]
             ) { result, error in
                 DispatchQueue.main.async {
                     guard let result else {
