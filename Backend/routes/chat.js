@@ -1,11 +1,13 @@
 const express = require("express");
 const UserChat = require("../models/UserChat");
 const verifyToken = require("../middleware/verifyToken"); 
+const { runChat } = require("../utils/LLM");
+
 
 const router = express.Router();
 
 // Testing Route: Chatbot Responds with a Predefined or Dynamic Message
-router.post("/test-chat", verifyToken, async (req, res) => {
+router.post("/test-chat", async (req, res) => {
     const { message } = req.body;
 
     if (!message || !message.text) {
@@ -13,7 +15,8 @@ router.post("/test-chat", verifyToken, async (req, res) => {
     }
 
     try {
-        const email = req.user.email; // Extract user email from token (handled in verifyToken middleware)
+        const email = "jzh9076@nyu.edu"
+        //req.user.email; // Extract user email from token (handled in verifyToken middleware)
 
         // Find or create a user chat document
         let userChat = await UserChat.findOne({ email });
@@ -55,7 +58,7 @@ router.post("/test-chat", verifyToken, async (req, res) => {
 });
 
 // Create or Update User and Add a New Message
-router.post("/", verifyToken, async (req, res) => {
+router.post("/", async (req, res) => {
     const { message } = req.body;
 
     if (!message) {
@@ -63,7 +66,8 @@ router.post("/", verifyToken, async (req, res) => {
     }
 
     try {
-        const email = req.user.email; 
+        const email = "ly2375@nyu.edu";
+        //req.user.email; 
 
         let userChat = await UserChat.findOne({ email });
 
@@ -80,10 +84,21 @@ router.post("/", verifyToken, async (req, res) => {
             text: message.text,
             isUserMessage: message.isUserMessage
         });
+        
+        // Generate the bot response using `runChat`
+        const botResponse = await runChat(message.text);
+        
+        // Add the bot response to the chat history
+        userChat.chatHistory.push({
+            text: botResponse,
+            isUserMessage: false
+        });
 
         await userChat.save();
 
-        res.status(200).json(userChat);
+        // Send the bot response back to the frontend
+        res.status(200).json(botResponse);
+
     } catch (err) {
         console.error("Error adding message:", err);
         res.status(500).json({ message: "Server error" });
@@ -91,7 +106,7 @@ router.post("/", verifyToken, async (req, res) => {
 });
 
 // Get Chat History for a User
-router.get("/", verifyToken, async (req, res) => {
+router.get("/", async (req, res) => {
     console.log("fetch")
     const email = req.user.email; 
     const { page = 1, limit = 10 } = req.query; // Default values: page 1, 10 messages per page
@@ -123,7 +138,7 @@ router.get("/", verifyToken, async (req, res) => {
 });
 
 // Clear Chat History for a User
-router.delete("/", verifyToken, async (req, res) => {
+router.delete("/", async (req, res) => {
     const email = req.user.email; 
 
     try {
