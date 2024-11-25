@@ -20,6 +20,9 @@ async function verifyToken(req, res, next) {
 
         req.user = {
             email: payload.email, 
+            name: payload.name,
+            //add for google calendar
+            googleId: payload.sub,
         };
 
         next();
