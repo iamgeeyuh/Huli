@@ -200,6 +200,6 @@ struct ChatMessage: Codable {
 
 struct ChatView_Previews: PreviewProvider {
     static var previews: some View {
-        ChatView(user: .constant(User(name: "Test User")))
+        ChatView(user: .constant(User(name: "Test User", email: "testuser@gmail.com")))
     }
 }

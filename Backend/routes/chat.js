@@ -3,11 +3,10 @@ const UserChat = require("../models/UserChat");
 const verifyToken = require("../middleware/verifyToken"); 
 const { runChat } = require("../utils/LLM");
 
-
 const router = express.Router();
 
 // Testing Route: Chatbot Responds with a Predefined or Dynamic Message
-router.post("/test-chat", async (req, res) => {
+router.post("/test-chat", verifyToken, async (req, res) => {
     const { message } = req.body;
 
     if (!message || !message.text) {
@@ -58,7 +57,7 @@ router.post("/test-chat", async (req, res) => {
 });
 
 // Create or Update User and Add a New Message
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
     const { message } = req.body;
 
     if (!message) {
@@ -106,8 +105,7 @@ router.post("/", async (req, res) => {
 });
 
 // Get Chat History for a User
-router.get("/", async (req, res) => {
-    console.log("fetch")
+router.get("/", verifyToken, async (req, res) => {
     const email = req.user.email; 
     const { page = 1, limit = 10 } = req.query; // Default values: page 1, 10 messages per page
 
@@ -138,7 +136,7 @@ router.get("/", async (req, res) => {
 });
 
 // Clear Chat History for a User
-router.delete("/", async (req, res) => {
+router.delete("/", verifyToken, async (req, res) => {
     const email = req.user.email; 
 
     try {

@@ -42,14 +42,16 @@ struct LoginView: View {
     func handleSignIn() {
         if let rootViewController = getRootViewController() {
             GIDSignIn.sharedInstance.signIn(
-                withPresenting: rootViewController
+                withPresenting: rootViewController,
+                hint: nil,
+                additionalScopes: ["https://www.googleapis.com/auth/calendar", "https://www.googleapis.com/auth/calendar.events"]
             ) { result, error in
                 DispatchQueue.main.async {
                     guard let result else {
                         print("Sign-in failed: \(error?.localizedDescription ?? "Unknown error")")
                         return
                     }
-                    self.user = User(name: result.user.profile?.name ?? "")
+                    self.user = User(name: result.user.profile?.name ?? "", email: result.user.profile?.email ?? "")
                 }
             }
         }

@@ -61,3 +61,5 @@ router.post("/events", verifyToken, async (req, res) => {
         res.status(500).json({ message: "Failed to add event" });
     }
 });
+
+module.exports = router;
