@@ -4,9 +4,11 @@ const { fetchCalendarEvents, addCalendarEvent } = require("../utils/googleCalend
 const Event = require("../models/Event"); // Import Event model
 const router = express.Router();
 
-router.get("/events", verifyToken, async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
+     console.log("get event")
     try {
         const accessToken = req.headers["x-access-token"];
+
         const googleEvents = await fetchCalendarEvents(accessToken);
 
         const userId = req.user.googleId; // Extracted from verifyToken
@@ -36,7 +38,8 @@ router.get("/events", verifyToken, async (req, res) => {
     }
 });
 
-router.post("/events", verifyToken, async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
+    console.log("post event")
     try {
         const accessToken = req.headers["x-access-token"];
         const event = req.body; // Event details sent from the frontend

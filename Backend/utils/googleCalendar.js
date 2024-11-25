@@ -18,10 +18,11 @@ async function fetchCalendarEvents(accessToken) {
 
 // Add event
 async function addCalendarEvent(accessToken, event) {
+    console.log(event)
     try {
         const response = await axios.post(
             "https://www.googleapis.com/calendar/v3/calendars/primary/events",
-            event,
+            JSON.stringify(event),
             {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
