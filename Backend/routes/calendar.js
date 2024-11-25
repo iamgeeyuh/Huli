@@ -1,34 +1,63 @@
 const express = require("express");
-const { getAuthURL, getAccessToken, oauth2Client } = require("../utils/googleAuth");
+const verifyToken = require("../middleware/verifyToken");
+const { fetchCalendarEvents, addCalendarEvent } = require("../utils/googleCalendar");
+const Event = require("../models/Event"); // Import Event model
 const router = express.Router();
 
-// Step 1: Redirect to Google Auth URL
-router.get("/google", (req, res) => {
-    const authURL = getAuthURL();
-    res.redirect(authURL); // Redirects user to Google's login page
-});
-
-// Step 2: Handle Google OAuth callback
-router.get("/google/callback", async (req, res) => {
-    const code = req.query.code;
-
-    if (!code) {
-        return res.status(400).send("Authorization code not provided!");
-    }
-
+router.get("/events", verifyToken, async (req, res) => {
     try {
-        // Exchange the code for tokens
-        const tokens = await getAccessToken(code);
+        const accessToken = req.headers["x-access-token"];
+        const googleEvents = await fetchCalendarEvents(accessToken);
 
-        // Save tokens securely (e.g., database, session, etc.)
-        // Example:
-        // await User.update({ email: req.user.email }, { googleTokens: tokens });
+        const userId = req.user.googleId; // Extracted from verifyToken
 
-        res.send("Google Calendar linked successfully!");
+        // Save Google events to the database
+        const dbEvents = googleEvents.items.map(async (event) => {
+            return await Event.findOneAndUpdate(
+                { eventId: event.id }, // Check if the event already exists
+                {
+                    userId,
+                    eventId: event.id,
+                    summary: event.summary,
+                    start: event.start,
+                    end: event.end,
+                },
+                { upsert: true, new: true } // Insert if not found, update if exists
+            );
+        });
+
+        // Wait for all database operations to complete
+        const savedEvents = await Promise.all(dbEvents);
+
+        res.status(200).json(savedEvents); // Return the saved events
     } catch (error) {
-        console.error("Error exchanging code for tokens:", error);
-        res.status(500).send("Failed to authenticate with Google");
+        console.error("Error fetching events:", error);
+        res.status(500).json({ message: "Failed to fetch events" });
     }
 });
 
-module.exports = router;
+router.post("/events", verifyToken, async (req, res) => {
+    try {
+        const accessToken = req.headers["x-access-token"];
+        const event = req.body; // Event details sent from the frontend
+
+        // Add the event to Google Calendar
+        const googleEvent = await addCalendarEvent(accessToken, event);
+
+        // Save the event to the database
+        const newEvent = new Event({
+            userId: req.user.googleId, // From verifyToken
+            eventId: googleEvent.id, // Google event ID
+            summary: googleEvent.summary,
+            start: googleEvent.start,
+            end: googleEvent.end,
+        });
+
+        await newEvent.save(); // Save to MongoDB
+
+        res.status(200).json(newEvent); // Return the saved event
+    } catch (error) {
+        console.error("Error adding event:", error);
+        res.status(500).json({ message: "Failed to add event" });
+    }
+});
