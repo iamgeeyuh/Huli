@@ -1,7 +1,7 @@
 const express = require("express");
 const connectDB = require("./config/mongodb");
 const chatRouter = require("./routes/chat");
-const authRoutes = require("./routes/auth");
+const calendarRoutes = require("./routes/calendar");
 require("dotenv").config();
 
 const app = express();
@@ -12,7 +12,7 @@ connectDB()
     app.use(express.json());
 
     app.use("/chat", chatRouter);
-    app.use("/auth", authRoutes);
+    app.use("/calendar", calendarRoutes);
 
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);

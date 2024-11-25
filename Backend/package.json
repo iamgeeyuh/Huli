@@ -19,7 +19,7 @@
     "google-auth-library": "^9.15.0",
     "googleapis": "^144.0.0",
     "mongodb": "^6.10.0",
-    "mongoose": "^8.8.1",
+    "mongoose": "^8.8.2",
     "nodemon": "^3.1.7",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0"
