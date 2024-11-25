@@ -1,10 +1,3 @@
-//
-//  HuliApp.swift
-//  Huli
-//
-//  Created by Jia Huang on 11/5/24.
-//
-
 import SwiftUI
 import GoogleSignIn
 
