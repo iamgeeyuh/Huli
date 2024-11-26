@@ -9,48 +9,67 @@ struct ChatView: View {
     @Binding var user: User?
     @State private var messages: [Message] = []
     @State private var currentMessage = ""
+    @State private var isSettingsPresented = false // For showing the settings popup
     
     var body: some View {
         VStack {
-            Button {
-                GIDSignIn.sharedInstance.signOut()
-                GIDSignIn.sharedInstance.disconnect()
-                self.user = nil
-            } label: {
-                Text("Log out")
-                    .padding()
-                    .background(Color.red)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+            HStack {
+                Text("Huli")
+                    .font(.system(size: 36, weight: .bold))
+                    .padding(.horizontal, 40)
+                Spacer()
+                // Settings Button
+                Button {
+                    isSettingsPresented = true
+                } label: {
+                    Image(systemName: "gearshape.fill")
+                        .font(.system(size: 24))
+                        .foregroundColor(Color(hex: "#F69B52"))
+                        .padding()
+                }
+                .padding()
+                .sheet(isPresented: $isSettingsPresented) {
+                    SettingsView(user: $user)
+                }
             }
-            .padding()
             
-            ScrollView {
-                VStack(spacing: 8) {
-                    ForEach(messages) { message in
-                        VStack(alignment: message.isUserMessage ? .trailing : .leading, spacing: 4) {
-                            Text(message.isUserMessage ? (user?.name ?? "You") : "Huli")
-                                .font(.caption)
-                                .foregroundColor(.gray)
-                                .padding(message.isUserMessage ? .trailing : .leading, message.isUserMessage ? 20 : 30)
-                            
+            ScrollViewReader { proxy in
+                ScrollView {
+                    LazyVStack {
+                        ForEach(messages) { message in
                             ChatBubble(message: message)
+                                .onAppear {
+                                    // Detect if the user scrolls to the top
+                                    if message == messages.first {
+                                        loadPreviousMessages()
+                                    }
+                                }
+                            Spacer()
                         }
                     }
                 }
-                .padding()
+                .onChange(of: messages) { _ in
+                    // Automatically scroll to the bottom when a new message is added
+                    if let lastMessage = messages.last {
+                        proxy.scrollTo(lastMessage.id, anchor: .bottom)
+                    }
+                }
             }
             
             ChatBar(currentMessage: $currentMessage, sendMessage: sendMessage)
         }
-        .navigationTitle("Chatbot")
         .onAppear {
             fetchMessages()
         }
     }
     
+    private func loadPreviousMessages() {
+        // Logic for loading previous messages
+        print("Loading previous messages...")
+    }
+    
     private func fetchMessages() {
-        guard let user = user else { return }
+        guard user != nil else { return }
         guard let url = URL(string: "\(AppConfig.backendURL)/chat") else { return }
         
         var request = URLRequest(url: url)
@@ -82,24 +101,84 @@ struct ChatView: View {
     }
     
     private func sendMessage() {
-        guard !currentMessage.isEmpty else { return }
+        guard !currentMessage.isEmpty, let user = user else { return }
         
         let userMessage = Message(text: currentMessage, isUserMessage: true)
         messages.append(userMessage)
         currentMessage = ""
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            let botResponse = Message(text: "This is a bot response!", isUserMessage: false)
-            messages.append(botResponse)
+        let newMessage = ["message": ["text": userMessage.text, "isUserMessage": true]]
+        
+        guard let url = URL(string: "\(AppConfig.backendURL)/chat") else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(getToken())", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: newMessage)
+        } catch {
+            print("Error serializing message: \(error)")
+            return
         }
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error sending message: \(error)")
+                return
+            }
+            guard let data = data else { return }
+            do {
+                let botResponse = try JSONDecoder().decode(Message.self, from: data)
+                print(botResponse)
+                DispatchQueue.main.async {
+                    self.messages.append(botResponse)
+                }
+            } catch {
+                print("Error decoding bot response: \(error)")
+            }
+        }.resume()
     }
+    
     
     func getToken() -> String {
         return GIDSignIn.sharedInstance.currentUser?.idToken?.tokenString ?? ""
     }
+    
+    func getAccessToken() -> String {
+        return GIDSignIn.sharedInstance.currentUser?.accessToken.tokenString ?? ""
+    }
 }
 
-struct Message: Identifiable {
+struct SettingsView: View {
+    @Binding var user: User?
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("Settings")
+                .font(.title)
+                .padding()
+            
+            Button {
+                GIDSignIn.sharedInstance.signOut()
+                GIDSignIn.sharedInstance.disconnect()
+                self.user = nil
+            } label: {
+                Text("Log out")
+                    .padding()
+                    .background(Color.red)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            }
+            .padding()
+            
+            Spacer()
+        }
+        .padding()
+    }
+}
+
+struct Message: Identifiable, Equatable, Codable {
     let id = UUID()
     let text: String
     let isUserMessage: Bool
@@ -111,19 +190,29 @@ struct ChatBar: View {
     
     var body: some View {
         HStack {
-            TextField("Chat with Huli", text: $currentMessage)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-            
-            Button(action: sendMessage) {
-                Image(systemName: "paperplane.fill")
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .clipShape(Circle())
+            ZStack {
+                TextField("Chat with Huli", text: $currentMessage)
+                    .padding(7)
+                    .padding(.leading, 15)
+                    .padding(.trailing, 40)
+                    .cornerRadius(25)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 25)
+                            .stroke(Color.black, lineWidth: 0.5)
+                    )
+                
+                HStack {
+                    Spacer()
+                    Button(action: sendMessage) {
+                        Image(systemName: "paperplane.fill")
+                            .foregroundColor(Color(hex: "#F69B52"))
+                            .padding(.trailing, 15)
+                    }
+                }
             }
-            .padding()
+            .padding(.horizontal)
         }
+        .padding()
     }
 }
 

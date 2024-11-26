@@ -58,6 +58,7 @@ router.post("/test-chat", verifyToken, async (req, res) => {
 
 // Create or Update User and Add a New Message
 router.post("/", verifyToken, async (req, res) => {
+    console.log("chat")
     const { message } = req.body;
 
     if (!message) {
@@ -65,7 +66,7 @@ router.post("/", verifyToken, async (req, res) => {
     }
 
     try {
-        const email = "ly2375@nyu.edu";
+        const email = req.user.email;
         //req.user.email; 
 
         let userChat = await UserChat.findOne({ email });
@@ -96,7 +97,10 @@ router.post("/", verifyToken, async (req, res) => {
         await userChat.save();
 
         // Send the bot response back to the frontend
-        res.status(200).json(botResponse);
+        res.status(200).json({
+            text: botResponse,
+            isUserMessage: false
+        });
 
     } catch (err) {
         console.error("Error adding message:", err);
