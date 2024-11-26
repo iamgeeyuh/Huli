@@ -56,7 +56,7 @@ router.post("/test-chat", verifyToken, async (req, res) => {
         end: { dateTime: "2024-11-27T00:45:00Z" },
       });
     } else if (userMessage.toLowerCase().includes("schedule a meeting")) {
-      botResponse = `Got it. You already have two classes on Thursday, and this meeting would mean a long commute. How about Friday morning instead? You’ll already be on campus then.`;
+      botResponse = `Got it. Since you’ll be on main campus for class this Friday, I noticed a free slot right after that—would you like to move the meeting to Friday instead? It could save you a trip and minimize commute time!`;
     } else if (userMessage.toLowerCase().includes("let’s do friday")) {
       botResponse = `Great choice! Scheduling “Meeting on main campus” for Friday at 10 AM. Let me know if anything changes.`;
 
@@ -95,9 +95,8 @@ router.post("/test-chat", verifyToken, async (req, res) => {
         end: { dateTime: "2024-11-30T01:00:00Z" },
       });
     } else if (userMessage.toLowerCase().includes("thank you")) {
-        botResponse = `No problem!`;
-    }
-    else {
+      botResponse = `No problem!`;
+    } else {
       botResponse = `I’m sorry, I’m not sure how to help with that. Can you rephrase?`;
     }
 
