@@ -35,37 +35,37 @@ router.post("/test-chat", verifyToken, async (req, res) => {
 
     // Scenario logic
     if (userMessage.toLowerCase().includes("schedule laundry")) {
-      (botResponse = `Sure! Adding “Laundry” to your calendar for 8 PM tonight. Would you like me to set a reminder?`),
+      (botResponse = `Sure! Adding “Laundry” to your calendar for 9 PM tonight. Would you like me to set a reminder?`),
         addCalendarEvent(accessToken, {
           summary: "Laundry",
           start: {
-            dateTime: "2024-11-27T01:00:00Z",
+            dateTime: "2024-11-27T02:00:00Z",
           },
           end: {
-            dateTime: "2024-11-27T02:00:00Z",
+            dateTime: "2024-11-27T03:00:00Z",
           },
         });
     } else if (userMessage.toLowerCase().includes("yes, please")) {
-      botResponse = `Reminder set for 7:45 PM. Anything else?`;
+      botResponse = `Reminder set for 8:45 PM. Anything else?`;
 
       addCalendarEvent(accessToken, {
         summary: "Laundry reminder",
         start: {
-          dateTime: "2024-11-27T00:45:00Z",
+          dateTime: "2024-11-27T01:45:00Z",
         },
-        end: { dateTime: "2024-11-27T00:45:00Z" },
+        end: { dateTime: "2024-11-27T01:45:00Z" },
       });
     } else if (userMessage.toLowerCase().includes("schedule a meeting")) {
       botResponse = `Got it. Since you’ll be on main campus for class this Friday, I noticed a free slot right after that—would you like to move the meeting to Friday instead? It could save you a trip and minimize commute time!`;
     } else if (userMessage.toLowerCase().includes("let’s do friday")) {
-      botResponse = `Great choice! Scheduling “Meeting on main campus” for Friday at 10 AM. Let me know if anything changes.`;
+      botResponse = `Great choice! Scheduling “Meeting on main campus” for Friday at 12 PM. Let me know if anything changes.`;
 
       addCalendarEvent(accessToken, {
         summary: "Meeting",
         start: {
-          dateTime: "2024-11-29T15:00:00Z",
+          dateTime: "2024-11-29T17:00:00Z",
         },
-        end: { dateTime: "2024-11-29T16:00:00Z" },
+        end: { dateTime: "2024-11-29T18:00:00Z" },
       });
     } else if (userMessage.toLowerCase().includes("stressed with school")) {
       botResponse = `I’m sorry to hear that. What’s been stressing you out?`;
@@ -78,21 +78,21 @@ router.post("/test-chat", verifyToken, async (req, res) => {
         start: {
           dateTime: "2024-11-28T00:00:00Z",
         },
-        end: { dateTime: "2024-11-28T01:00:00Z" },
+        end: { dateTime: "2024-11-28T02:00:00Z" },
       });
       addCalendarEvent(accessToken, {
         summary: "study session",
         start: {
           dateTime: "2024-11-29T00:00:00Z",
         },
-        end: { dateTime: "2024-11-29T01:00:00Z" },
+        end: { dateTime: "2024-11-29T02:00:00Z" },
       });
       addCalendarEvent(accessToken, {
         summary: "study session",
         start: {
           dateTime: "2024-11-30T00:00:00Z",
         },
-        end: { dateTime: "2024-11-30T01:00:00Z" },
+        end: { dateTime: "2024-11-30T02:00:00Z" },
       });
     } else if (userMessage.toLowerCase().includes("thank you")) {
       botResponse = `No problem!`;
@@ -104,6 +104,11 @@ router.post("/test-chat", verifyToken, async (req, res) => {
     userChat.chatHistory.push({
       text: userMessage,
       isUserMessage: true,
+    });
+
+    userChat.chatHistory.push({
+      text: botResponse,
+      isUserMessage: false,
     });
 
     // Save the updated chat history to the database
