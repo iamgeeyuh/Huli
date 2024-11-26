@@ -109,11 +109,12 @@ struct ChatView: View {
         
         let newMessage = ["message": ["text": userMessage.text, "isUserMessage": true]]
         
-        guard let url = URL(string: "\(AppConfig.backendURL)/chat") else { return }
+        guard let url = URL(string: "\(AppConfig.backendURL)/chat/test-chat") else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("Bearer \(getToken())", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(getAccessToken(), forHTTPHeaderField: "x-access-token")
         
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: newMessage)
