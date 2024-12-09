@@ -114,6 +114,7 @@ struct ChatView: View {
         request.httpMethod = "POST"
         request.setValue("Bearer \(getToken())", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(getAccessToken(), forHTTPHeaderField: "x-access-token")
         
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: newMessage)
