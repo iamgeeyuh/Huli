@@ -13,7 +13,7 @@ const model = genAI.getGenerativeModel({ model: "tunedModels/huli-calendar-assis
 const { getConversationHistory } = require("../utils/conversationUtils");
 const UserChat = require("../models/UserChat");
 
-async function runChat(userInput, userEmail) {
+async function runChat(userInput, userEmail, accessToken) {
 
   const generationConfig = {
     temperature: 0.9,
@@ -117,12 +117,13 @@ async function runChat(userInput, userEmail) {
     generationConfig,
     safetySettings,
     history: conversationHistory,
-    functionDeclarations: functionDeclarations,
+    functionDeclarations,
   });
 
   try {
     // Step 1: Fetch Events
-    const events = await fetchCalendarEvents(); // Always fetch events
+    const events = await fetchCalendarEvents(accessToken); // Always fetch events
+    console.log(events)
     const eventsData = events.map((event) => ({
       title: event.summary,
       start: event.start.dateTime || event.start.date,
@@ -130,22 +131,26 @@ async function runChat(userInput, userEmail) {
     }));
   
   // Step 2: Combine User Input and Fetched Events
-  const augmentedInput = `User input: "${userInput}". Relevant events: ${JSON.stringify(eventsData)}`;
+  const augmentedInput = `User input: "${userInput}". Relevant events: ${JSON.stringify(eventsData)}. Use one of the declared functions if applicable.`;
 
   // Step 3: Get LLM Response
   const result = await chat.sendMessage(augmentedInput);
+  console.log(result)
+  console.log(result.response.functionCalls())
   
   // Step 4: Check for Function Calls
     if (result.response.functionCalls()) {
       const { functionName, arguments: args } = result.response.functionCalls();
 
       let functionResult;
+      console.log(functionName)
       switch (functionName) {
         case "fetch_events":
           // Use already fetched events if needed
           functionResult = eventsData;
           break;
         case "add_event":
+          console.log(args)
           functionResult = await addCalendarEvent(
             args.summary,
             args.startDateTime,

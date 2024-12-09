@@ -59,6 +59,9 @@ router.post("/test-chat", verifyToken, async (req, res) => {
 // Create or Update User and Add a New Message
 router.post("/", verifyToken, async (req, res) => {
     console.log("chat")
+
+    const accessToken = req.headers["x-access-token"];
+
     const { message } = req.body;
 
     if (!message) {
@@ -86,7 +89,7 @@ router.post("/", verifyToken, async (req, res) => {
         });
         
         // Generate the bot response using `runChat`
-        const botResponse = await runChat(message.text, email);
+        const botResponse = await runChat(message.text, email, accessToken);
         
         // Add the bot response to the chat history
         userChat.chatHistory.push({

@@ -6,6 +6,8 @@ async function fetchCalendarEvents(accessToken) {
     let events = [];
     let pageToken;
 
+    console.log(accessToken)
+
     do {
       const response = await axios.get(
         "https://www.googleapis.com/calendar/v3/calendars/primary/events",
