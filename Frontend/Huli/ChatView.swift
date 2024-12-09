@@ -12,55 +12,61 @@ struct ChatView: View {
     @State private var isSettingsPresented = false // For showing the settings popup
     
     var body: some View {
-        VStack {
-            HStack {
-                Text("Huli")
-                    .font(.system(size: 36, weight: .bold))
-                    .padding(.horizontal, 40)
-                Spacer()
-                // Settings Button
-                Button {
-                    isSettingsPresented = true
-                } label: {
-                    Image(systemName: "gearshape.fill")
-                        .font(.system(size: 24))
-                        .foregroundColor(Color(hex: "#F69B52"))
-                        .padding()
+            VStack {
+                HStack {
+                    Text("Huli")
+                        .font(.system(size: 36, weight: .bold))
+                        .padding(.horizontal, 40)
+                    Spacer()
+                    NavigationLink(destination: PlayView()) {
+                        Image(systemName: "heart.fill")
+                            .font(.system(size: 24))
+                            .foregroundColor(.red)
+                            .padding(.trailing, 0)
+                    }
+                    // Settings Button
+                    Button {
+                        isSettingsPresented = true
+                    } label: {
+                        Image(systemName: "gearshape.fill")
+                            .font(.system(size: 24))
+                            .foregroundColor(Color(hex: "#F69B52"))
+                            .padding(.leading, 0)
+                    }
+                    .padding()
+                    .sheet(isPresented: $isSettingsPresented) {
+                        SettingsView(user: $user)
+                    }
                 }
-                .padding()
-                .sheet(isPresented: $isSettingsPresented) {
-                    SettingsView(user: $user)
-                }
-            }
-            
-            ScrollViewReader { proxy in
-                ScrollView {
-                    LazyVStack {
-                        ForEach(messages) { message in
-                            ChatBubble(message: message)
-                                .onAppear {
-                                    // Detect if the user scrolls to the top
-                                    if message == messages.first {
-                                        loadPreviousMessages()
+                
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        LazyVStack {
+                            ForEach(messages) { message in
+                                ChatBubble(message: message)
+                                    .onAppear {
+                                        // Detect if the user scrolls to the top
+                                        if message == messages.first {
+                                            loadPreviousMessages()
+                                        }
                                     }
-                                }
-                            Spacer()
+                                Spacer()
+                            }
+                        }
+                    }
+                    .onChange(of: messages) { _ in
+                        // Automatically scroll to the bottom when a new message is added
+                        if let lastMessage = messages.last {
+                            proxy.scrollTo(lastMessage.id, anchor: .bottom)
                         }
                     }
                 }
-                .onChange(of: messages) { _ in
-                    // Automatically scroll to the bottom when a new message is added
-                    if let lastMessage = messages.last {
-                        proxy.scrollTo(lastMessage.id, anchor: .bottom)
-                    }
-                }
+                
+                ChatBar(currentMessage: $currentMessage, sendMessage: sendMessage)
             }
-            
-            ChatBar(currentMessage: $currentMessage, sendMessage: sendMessage)
-        }
-        .onAppear {
-            fetchMessages()
-        }
+            .onAppear {
+                fetchMessages()
+            }
     }
     
     private func loadPreviousMessages() {
