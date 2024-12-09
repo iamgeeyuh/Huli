@@ -13,7 +13,7 @@ const model = genAI.getGenerativeModel({ model: "tunedModels/huli-calendar-assis
 const { getConversationHistory } = require("../utils/conversationUtils");
 const UserChat = require("../models/UserChat");
 
-async function runChat(userInput) {
+async function runChat(userInput, userEmail) {
 
   const generationConfig = {
     temperature: 0.9,

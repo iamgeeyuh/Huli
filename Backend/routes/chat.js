@@ -86,7 +86,7 @@ router.post("/", verifyToken, async (req, res) => {
         });
         
         // Generate the bot response using `runChat`
-        const botResponse = await runChat(message.text);
+        const botResponse = await runChat(message.text, email);
         
         // Add the bot response to the chat history
         userChat.chatHistory.push({
