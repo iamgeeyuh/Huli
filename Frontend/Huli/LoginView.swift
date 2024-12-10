@@ -7,7 +7,7 @@ struct LoginView: View {
     
     var body: some View {
         VStack(spacing: 16) {
-            Image("neutal-huli")
+            Image("neutral-huli")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 250, height: 250)

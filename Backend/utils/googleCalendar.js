@@ -48,7 +48,7 @@ async function deleteCalendarEvent(accessToken, eventId) {
     );
     return { success: true };
   } catch (error) {
-    onsole.error("Error deleting calendar event:", error);
+    console.error("Error deleting calendar event:", error);
     throw error;
   }
 }

@@ -55,9 +55,9 @@ router.post("/test-chat", verifyToken, async (req, res) => {
 
         // Schedule multiple small study sessions
         const studySessions = [
-          { start: "2024-12-10T19:00:00Z", end: "2024-12-11T12:00:00Z" },
-          { start: "2024-12-11T19:00:00Z", end: "2024-12-12T12:00:00Z" },
-          { start: "2024-12-12T19:00:00Z", end: "2024-12-13T12:00:00Z" },
+          { start: "2024-12-11T15:00:00Z", end: "2024-12-11T16:00:00Z" },
+          { start: "2024-12-12T15:00:00Z", end: "2024-12-12T16:00:00Z" },
+          { start: "2024-12-10T15:00:00Z", end: "2024-12-10T16:00:00Z" },
         ];
         studySessions.forEach((session) =>
           addCalendarEvent(accessToken, {
@@ -87,12 +87,12 @@ router.post("/test-chat", verifyToken, async (req, res) => {
 
       // Cancel scheduled study sessions
       // (This would require implementing a deleteCalendarEvent function to remove specific events from the calendar)
-      deleteCalendarEvent(accessToken, "77qdr7fq49qcn3g2s6eij9vr77v")
+      deleteCalendarEvent(accessToken, "3bjcebo88srqqgvljls137pplm")
 
       addCalendarEvent(accessToken, {
         summary: "relax!",
-        start: { dateTime: "2024-13-12T17:00:00Z" }, // Night before the exam
-        end: { dateTime: "2024-13-13T01:00:00Z" }, // 4-hour session
+        start: { dateTime: "2024-12-13T17:00:00Z" }, // Night before the exam
+        end: { dateTime: "2024-12-14T01:00:00Z" }, // 4-hour session
       });
     }
     // Default response
