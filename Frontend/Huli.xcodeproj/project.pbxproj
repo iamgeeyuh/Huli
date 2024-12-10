@@ -24,6 +24,7 @@
 		B9AC3EDE2CDA88FE00FCC16B /* HuliUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AC3EDD2CDA88FE00FCC16B /* HuliUITests.swift */; };
 		B9AC3EE02CDA88FE00FCC16B /* HuliUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AC3EDF2CDA88FE00FCC16B /* HuliUITestsLaunchTests.swift */; };
 		B9AC3F0F2CDB2A4F00FCC16B /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AC3F0E2CDB2A4F00FCC16B /* Color+Hex.swift */; };
+		B9C47A5C2D0368D3008D8976 /* PlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C47A5B2D0368CF008D8976 /* PlayView.swift */; };
 		B9F586572CE7C1CD00CD1785 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = B9F586562CE7C1CD00CD1785 /* GoogleSignIn */; };
 		B9F586592CE7C1CD00CD1785 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B9F586582CE7C1CD00CD1785 /* GoogleSignInSwift */; };
 /* End PBXBuildFile section */
@@ -61,6 +62,7 @@
 		B9AC3EDD2CDA88FE00FCC16B /* HuliUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HuliUITests.swift; sourceTree = "<group>"; };
 		B9AC3EDF2CDA88FE00FCC16B /* HuliUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HuliUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		B9AC3F0E2CDB2A4F00FCC16B /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
+		B9C47A5B2D0368CF008D8976 /* PlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayView.swift; sourceTree = "<group>"; };
 		B9F586542CE7BA0800CD1785 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -123,6 +125,7 @@
 				B9AC3EC12CDA88FC00FCC16B /* HuliApp.swift */,
 				B95B46D52CF1224C00F0B96B /* LoginView.swift */,
 				B95B46D72CF1227900F0B96B /* ChatView.swift */,
+				B9C47A5B2D0368CF008D8976 /* PlayView.swift */,
 				B95B46D92CF2586E00F0B96B /* AppConfig.swift */,
 				B9AC3EC32CDA88FC00FCC16B /* ContentView.swift */,
 				B9F586542CE7BA0800CD1785 /* Info.plist */,
@@ -295,6 +298,7 @@
 				B9AC3F0F2CDB2A4F00FCC16B /* Color+Hex.swift in Sources */,
 				B95B46D62CF1225000F0B96B /* LoginView.swift in Sources */,
 				B95B46D82CF1227B00F0B96B /* ChatView.swift in Sources */,
+				B9C47A5C2D0368D3008D8976 /* PlayView.swift in Sources */,
 				B95B46DA2CF2587200F0B96B /* AppConfig.swift in Sources */,
 				B9AC3EC42CDA88FC00FCC16B /* ContentView.swift in Sources */,
 				B9AC3EC22CDA88FC00FCC16B /* HuliApp.swift in Sources */,
