@@ -57,7 +57,6 @@ router.post("/test-chat", verifyToken, async (req, res) => {
         const studySessions = [
           { start: "2024-12-11T15:00:00Z", end: "2024-12-11T16:00:00Z" },
           { start: "2024-12-12T15:00:00Z", end: "2024-12-12T16:00:00Z" },
-          { start: "2024-12-10T15:00:00Z", end: "2024-12-10T16:00:00Z" },
         ];
         studySessions.forEach((session) =>
           addCalendarEvent(accessToken, {
