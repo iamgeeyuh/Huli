@@ -2,7 +2,7 @@ const express = require("express");
 const UserChat = require("../models/UserChat");
 const verifyToken = require("../middleware/verifyToken");
 const { runChat } = require("../utils/LLM");
-const { addCalendarEvent } = require("../utils/googleCalendar");
+const { addCalendarEvent, deleteCalendarEvent } = require("../utils/googleCalendar");
 
 const router = express.Router();
 
@@ -33,70 +33,70 @@ router.post("/test-chat", verifyToken, async (req, res) => {
     const userMessage = message.text.trim();
     let botResponse = "";
 
-    // Scenario logic
-    if (userMessage.toLowerCase().includes("schedule laundry")) {
-      (botResponse = `Sure! Adding “Laundry” to your calendar for 9 PM tonight. Would you like me to set a reminder?`),
+    // Scenario 1: Scheduling lunch
+    if (userMessage.toLowerCase().includes("lunch")) {
+      botResponse = `Got it! Adding “Lunch” to your calendar for tomorrow at 11 AM. Let me know if there’s anything else!`;
+
+      addCalendarEvent(accessToken, {
+        summary: "Lunch",
+        start: {
+          dateTime: "2024-12-11T16:00:00Z"
+        },
+        end: {
+          dateTime: "2024-12-11T17:00:00Z"
+        }, 
+      });
+    }
+    // Scenario 2: Exam and study session personalization
+    else if (userMessage.toLowerCase().includes("exam")) {
+
+      if (req.user.email == "ly2375@nyu.edu") {
+        botResponse = `Noted! You prefer studying in short sessions. I’ll schedule study blocks leading up to your exam. Stay hydrated and take breaks!`;
+
+        // Schedule multiple small study sessions
+        const studySessions = [
+          { start: "2024-12-10T19:00:00Z", end: "2024-12-11T12:00:00Z" },
+          { start: "2024-12-11T19:00:00Z", end: "2024-12-12T12:00:00Z" },
+          { start: "2024-12-12T19:00:00Z", end: "2024-12-13T12:00:00Z" },
+        ];
+        studySessions.forEach((session) =>
+          addCalendarEvent(accessToken, {
+            summary: "Study Session",
+            start: { dateTime: session.start },
+            end: { dateTime: session.end },
+          })
+        );
+      } else if (req.user.email == "jzh9076@nyu.edu") {
+        botResponse = `Got it! You prefer focusing in one big session. I’ll schedule a study block the night before your exam. Good luck!`;
+
+        // Schedule one large session
         addCalendarEvent(accessToken, {
-          summary: "Laundry",
-          start: {
-            dateTime: "2024-11-27T02:00:00Z",
-          },
-          end: {
-            dateTime: "2024-11-27T03:00:00Z",
-          },
+          summary: "Big Study Session",
+          start: { dateTime: "2024-12-12T23:00:00Z" }, // Night before the exam
+          end: { dateTime: "2024-12-13T03:00:00Z" }, // 4-hour session
         });
-    } else if (userMessage.toLowerCase().includes("yes, please")) {
-      botResponse = `Reminder set for 8:45 PM. Anything else?`;
+      }
+    }
+    // Scenario 3: Burnout and relaxation
+    else if (userMessage.toLowerCase().includes("burnt")) {
+      botResponse = `I’m sorry to hear that. Would you like me to cancel your office hour visit and block time for relaxation? Rest is just as important as progress. You can also try the "Play with Huli" feature for a mental reset!`;
+
+      // Offer to cancel existing study sessions and suggest relaxation
+    } else if (userMessage.toLowerCase().includes("cancel")) {
+      botResponse = `Understood. I’ll cancel your study sessions and block time for relaxation. You deserve a break. Let me know if there’s anything else I can help with!`;
+
+      // Cancel scheduled study sessions
+      // (This would require implementing a deleteCalendarEvent function to remove specific events from the calendar)
+      deleteCalendarEvent(accessToken, "77qdr7fq49qcn3g2s6eij9vr77v")
 
       addCalendarEvent(accessToken, {
-        summary: "Laundry reminder",
-        start: {
-          dateTime: "2024-11-27T01:45:00Z",
-        },
-        end: { dateTime: "2024-11-27T01:45:00Z" },
+        summary: "relax!",
+        start: { dateTime: "2024-13-12T17:00:00Z" }, // Night before the exam
+        end: { dateTime: "2024-13-13T01:00:00Z" }, // 4-hour session
       });
-    } else if (userMessage.toLowerCase().includes("schedule a meeting")) {
-      botResponse = `Got it. Since you’ll be on main campus for class this Friday, I noticed a free slot right after that—would you like to move the meeting to Friday instead? It could save you a trip and minimize commute time!`;
-    } else if (userMessage.toLowerCase().includes("let’s do friday")) {
-      botResponse = `Great choice! Scheduling “Meeting on main campus” for Friday at 12 PM. Let me know if anything changes.`;
-
-      addCalendarEvent(accessToken, {
-        summary: "Meeting",
-        start: {
-          dateTime: "2024-11-29T17:00:00Z",
-        },
-        end: { dateTime: "2024-11-29T18:00:00Z" },
-      });
-    } else if (userMessage.toLowerCase().includes("stressed with school")) {
-      botResponse = `I’m sorry to hear that. What’s been stressing you out?`;
-    } else if (userMessage.toLowerCase().includes("assignments and exams")) {
-      botResponse = `That sounds overwhelming. Want me to block out some study sessions in your calendar?`;
-    } else if (userMessage.toLowerCase().includes("study sessions")) {
-      botResponse = `Got it. I’ll schedule study sessions from 7 PM to 9 PM every evening. And remember, taking breaks is just as important as studying!`;
-      addCalendarEvent(accessToken, {
-        summary: "study session",
-        start: {
-          dateTime: "2024-11-28T00:00:00Z",
-        },
-        end: { dateTime: "2024-11-28T02:00:00Z" },
-      });
-      addCalendarEvent(accessToken, {
-        summary: "study session",
-        start: {
-          dateTime: "2024-11-29T00:00:00Z",
-        },
-        end: { dateTime: "2024-11-29T02:00:00Z" },
-      });
-      addCalendarEvent(accessToken, {
-        summary: "study session",
-        start: {
-          dateTime: "2024-11-30T00:00:00Z",
-        },
-        end: { dateTime: "2024-11-30T02:00:00Z" },
-      });
-    } else if (userMessage.toLowerCase().includes("thank you")) {
-      botResponse = `No problem!`;
-    } else {
+    }
+    // Default response
+    else {
       botResponse = `I’m sorry, I’m not sure how to help with that. Can you rephrase?`;
     }
 
